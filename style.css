@@ -1,0 +1,53 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f4f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    width: 700px;
+    text-align: center;
+}
+
+canvas {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    cursor: crosshair;
+}
+
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Unified button + select styling */
+button, select {
+    flex: 1;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    margin: 0 5px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover, select:hover {
+    background: #1d4ed8;
+}
+
+button:active {
+    transform: scale(0.97);
+}
