@@ -169,3 +169,4 @@ thicknessButtons[0].classList.add("active");*/
         penWidth = parseInt(btn.getAttribute("data-size"));
     });
 });*/
+
