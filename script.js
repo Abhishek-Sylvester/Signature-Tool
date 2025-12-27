@@ -1,5 +1,6 @@
 const canvas = document.getElementById('signatureCanvas');
 const ctx = canvas.getContext('2d');
+let history  =[];
 
 function resizeCanvas(){
     canvas.width = canvas.offsetWidth;
@@ -9,7 +10,7 @@ function resizeCanvas(){
 resizeCanvas();
 
 let drawing = false;
-
+let penWidth = 2;
 function getPos(e) {
     const rect = canvas.getBoundingClientRect();
 
@@ -39,7 +40,7 @@ function draw(e) {
 
     const pos = getPos(e);
 
-    ctx.lineWidth = 2;
+    ctx.lineWidth = penWidth;
     ctx.lineCap = "round";
     ctx.strokeStyle = "#000";
 
@@ -48,7 +49,15 @@ function draw(e) {
 }
 
 function endDraw() {
+    if (!drawing) return;
+
     drawing = false;
+    ctx.closePath();
+    saveState();
+}
+
+function saveState(){
+    history.push(canvas.toDataURL())
 }
 
 canvas.addEventListener('mousedown', startDraw);
@@ -62,6 +71,7 @@ canvas.addEventListener("touchend", endDraw);
 
 document.getElementById("clearBtn").addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    history = [];
 });
 
 document.getElementById("savePngBtn").addEventListener("click", () =>{
@@ -121,3 +131,42 @@ document.getElementById("savePdfBtn").addEventListener("click", () => {
     pdf.addImage(imgData, "PNG", x, y, imgWidth, imgHeight);
     pdf.save("signature.pdf");
 });
+
+document.getElementById("undoBtn").addEventListener("click", () =>{
+    if(history.length == 0){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+    }
+
+    history.pop(); // remove current state
+
+    const img = new Image();
+
+    if (history.length > 0) {
+        img.src = history[history.length - 1];
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+    } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+})
+
+/*const thicknessButtons = document.querySelectorAll(".thick-btn");
+thicknessButtons[0].classList.add("active");*/
+
+/*thicknessButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+
+        // Remove active from all
+        thicknessButtons.forEach(b => b.classList.remove("active"));
+
+        // Mark clicked as active
+        btn.classList.add("active");
+
+        // Update pen size
+        penWidth = parseInt(btn.getAttribute("data-size"));
+    });
+});*/
+
